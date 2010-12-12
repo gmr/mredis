@@ -12,12 +12,18 @@ Purposefully ommitted commands:
 from binascii import crc32
 import redis
 
+
+class InvalidHashMethod(Exception):
+    pass
+
+
 class UnextendedRedisCommand(Exception):
     pass
 
+
 class MRedis:
 
-    def __init__(self, config):
+    def __init__(self, config, hash_method = 'standard'):
         """
         Expects a list of dictionaries containing host, port, db:
 
@@ -25,12 +31,16 @@ class MRedis:
                    {'host': 'localhost', 'port': 6380, 'db': 0}]
 
         mr = mredis.MRedis(servers)
-
         """
 
         self.pool = redis.ConnectionPool()
         self.servers = []
         self.pipeline = []
+
+        if hash_method not in ['standard']:
+            raise InvalidHashMethod
+
+        self.hash_method = hash_method
 
         for server in config:
 
@@ -39,12 +49,15 @@ class MRedis:
                                             db=server['db'],
                                             connection_pool=self.pool))
 
-
     ### MRedis Specific Parts ###
     def get_node_offset(self, key):
         "Return the redis node list offset to use"
-        c = crc32(key) >> 16 & 0x7fff
-        return c % len(self.servers)
+
+        if self.hash_method == 'standard':
+            c = crc32(key) >> 16 & 0x7fff
+            return c % len(self.servers)
+
+        raise InvalidHashMethod
 
 
     def get_server_key(self, server):

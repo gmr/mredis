@@ -68,5 +68,6 @@ Any function listed as deprecated in the redis-py code.
 Notes
 =====
 
-Redis.sort will not store currently, needs to be extended to manually store to
-the correct server
+Redis.sort will not store currently, needs to be extended to manually store to the correct server.
+
+Currently the only hash_method supported is "standard" which is a crc32 value of the key mod the number of servers.
