@@ -56,14 +56,57 @@ Example
     # Demonstrate we fetched as many keys as we set
     print '%i keys fetched' % len(results)
 
+Pipelining
+==========
+
+While the goal is to make the client behave as closely as possible to redis-py, due to the nature of distributing keys across multiple servers, pipelining can
+not be handled the same way.
+
+Because of this, pipeline objects are added per server and should only be used for the same key.
+
+Using multiple keys in a pipeline may and most likely will result in data being stored or used in the wrong server and will yield unpredictable results.
+
+When you request a pipeline object, you pass in a key which will return the proper server for the pipeline.
+
+Using pipelining:
+
+
+    servers = [{'host': 'localhost', 'port': 6379, 'db': 0},
+               {'host': 'localhost', 'port': 6380, 'db': 0}]
+
+    mr = mredis.MRedis(servers)
+
+    pipeline = mr.pipeline(key)
+    pipeline.lpush(key, value).lpop(key, value).llen(key)
+    pipeline.execute()
+
+
 Purposefully omitted functionality
 ==================================
+
+The following functions are currently unimplemented due to complexity in keeping the same behavior with multiple servers.
 
 * Redis.mget
 * Redis.mset
 * Redis.msetnx
+* Redis.rename
+* Redis.renamenx
+* Redis.blpop
+* Redis.brpop
+* Redis.sdiff
+* Redis.sdiffstore
+* Redis.sinter
+* Redis.sinterstore
+* Redis.smove
+* Redis.sunion
+* Redis.sunionstore
+* Redis.zinterstore
+* Redis.zunionstore
+* Redis._zaggregate
 
-Any function listed as deprecated in the redis-py code.
+All Hash and Channel related functionality.
+
+Any function listed as deprecated in the redis-py code is not implemented in mredis.
 
 Notes
 =====

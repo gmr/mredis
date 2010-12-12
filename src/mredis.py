@@ -13,14 +13,6 @@ from binascii import crc32
 import redis
 
 
-class InvalidHashMethod(Exception):
-    pass
-
-
-class UnextendedRedisCommand(Exception):
-    pass
-
-
 class MRedis:
 
     def __init__(self, config, hash_method='standard'):
@@ -35,7 +27,6 @@ class MRedis:
 
         self.pool = redis.ConnectionPool()
         self.servers = []
-        self.pipeline = []
 
         if hash_method not in ['standard']:
             raise InvalidHashMethod
@@ -253,13 +244,19 @@ class MRedis:
         return response
 
     def rename(self, key):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
 
-        # @TODO Write this function, will have to manually perform functions
         raise UnextendedRedisCommand
 
     def renamenx(self, key):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
 
-        # @TODO Write this function, will have to manually perform functions
         raise UnextendedRedisCommand
 
     def set(self, key, value):
@@ -299,12 +296,18 @@ class MRedis:
 
     ### List Commands ###
     def blpop(self, keys, timeout=0):
-        # @TODO Write this function, will have to manually perform functions
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
 
         raise UnextendedRedisCommand
 
     def brpop(self, keys, timeout=0):
-        # @TODO Write this function, will have to manually perform functions
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
 
         raise UnextendedRedisCommand
 
@@ -379,3 +382,262 @@ class MRedis:
         offset = self.get_node_offset(key)
         return self.servers[offset].store(key, start, num, by, get, desc,
                                           alpha, None)
+
+    #### SET COMMANDS ####
+    def sadd(self, key, value):
+        "Add ``value`` to set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].sadd(key, value)
+
+    def scard(self, key):
+        "Return the number of elements in set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].scard(key)
+
+    def sdiff(self, keys, *args):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def sdiffstore(self, dest, keys, *args):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def sinter(self, keys, *args):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def sinterstore(self, dest, keys, *args):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def sismember(self, key, value):
+        "Return a boolean indicating if ``value`` is a member of set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].sismember(key, value)
+
+    def smembers(self, key):
+        "Return all members of the set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].smembers(key)
+
+    def smove(self, src, dst, value):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def spop(self, key):
+        "Remove and return a random member of set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].spop(key)
+
+    def srandmember(self, key):
+        "Return a random member of set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].srandmember(key)
+
+    def srem(self, key, value):
+        "Remove ``value`` from set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].srem(key, value)
+
+    def sunion(self, keys, *args):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def sunionstore(self, dest, keys, *args):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    #### SORTED SET COMMANDS ####
+    def zadd(self, key, value, score):
+        "Add member ``value`` with score ``score`` to sorted set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zadd(key, value, score)
+
+    def zcard(self, key):
+        "Return the number of elements in the sorted set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zcard(key)
+
+    def zcount(self, key, min, max):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zcount(key, min, max)
+
+    def zincrby(self, key, value, amount=1):
+        "Increment the score of ``value`` in sorted set ``key`` by ``amount``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zadd(key, amount, value)
+
+    def zinterstore(self, dest, keys, aggregate=None):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def zrange(self, key, start, end, desc=False, withscores=False):
+        """
+        Return a range of values from sorted set ``key`` between
+        ``start`` and ``end`` sorted in ascending order.
+
+        ``start`` and ``end`` can be negative, indicating the end of the range.
+
+        ``desc`` indicates to sort in descending order.
+
+        ``withscores`` indicates to return the scores along with the values.
+            The return type is a list of (value, score) pairs
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zrange(key, start, end, desc, withscores)
+
+    def zrangebyscore(self, key, min, max,
+            start=None, num=None, withscores=False):
+        """
+        Return a range of values from the sorted set ``key`` with scores
+        between ``min`` and ``max``.
+
+        If ``start`` and ``num`` are specified, then return a slice of the range.
+
+        ``withscores`` indicates to return the scores along with the values.
+            The return type is a list of (value, score) pairs
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zrangebyscore(key, min, max, start, num,
+                                                  withscores)
+
+    def zrank(self, key, value):
+        """
+        Returns a 0-based value indicating the rank of ``value`` in sorted set
+        ``key``
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zrank(key, value)
+
+    def zrem(self, key, value):
+        "Remove member ``value`` from sorted set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zrem(key, value)
+
+    def zremrangebyrank(self, key, min, max):
+        """
+        Remove all elements in the sorted set ``key`` with ranks between
+        ``min`` and ``max``. Values are 0-based, ordered from smallest score
+        to largest. Values can be negative indicating the highest scores.
+        Returns the number of elements removed
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zremrangebyrank(key, min, max)
+
+    def zremrangebyscore(self, key, min, max):
+        """
+        Remove all elements in the sorted set ``key`` with scores
+        between ``min`` and ``max``. Returns the number of elements removed.
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zremrangebyscore(key, min, max)
+
+    def zrevrange(self, key, start, num, withscores=False):
+        """
+        Return a range of values from sorted set ``key`` between
+        ``start`` and ``num`` sorted in descending order.
+
+        ``start`` and ``num`` can be negative, indicating the end of the range.
+
+        ``withscores`` indicates to return the scores along with the values
+            as a dictionary of value => score
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zrevrange(key, start, num, withscores)
+
+    def zrevrank(self, key, value):
+        """
+        Returns a 0-based value indicating the descending rank of
+        ``value`` in sorted set ``key``
+        """
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zrevrank(key, value)
+
+    def zscore(self, key, value):
+        "Return the score of element ``value`` in sorted set ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].zscore(key, value)
+
+
+    def zunionstore(self, dest, keys, aggregate=None):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    def _zaggregate(self, command, dest, keys, aggregate=None):
+        """
+        Currently unimplemented due to complexity of perserving this behavior
+        properly with multiple servers.
+        """
+
+        raise UnextendedRedisCommand
+
+    ### Pipeline Function ###
+    def pipeline(self, key):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].pipeline()
+
+
+class InvalidHashMethod(Exception):
+    pass
+
+
+class UnextendedRedisCommand(Exception):
+    pass
+
