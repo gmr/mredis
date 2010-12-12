@@ -275,3 +275,102 @@ class MRedis:
         offset = self.get_node_offset(key)
         return self.servers[offset].unwatch(key)
 
+
+    ### List Commands ###
+    def blpop(self, keys, timeout=0):
+
+        # @TODO Write this function, will have to manually perform functions
+        raise UnextendedRedisCommand
+
+
+    def brpop(self, keys, timeout=0):
+
+        # @TODO Write this function, will have to manually perform functions
+        raise UnextendedRedisCommand
+
+
+    def lindex(self, key, index):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].lindex(key, index)
+
+
+    def linsert(self, key, where, refvalue, value):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].linsert(key, where, refvalue, value)
+
+
+    def llen (self, key):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].llen(key)
+
+
+    def lpop (self, key):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].lpop(key)
+
+
+    def lpush (self, key, value):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].lpush(key, value)
+
+
+    def lpushx (self, key, value):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].lpushx(key, value)
+
+
+    def lrange (self, key, start, end):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].lrange(key, start, end)
+
+
+    def lrem(self, key, value, num=0):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].lrem(key, value, num)
+
+
+    def lset(self, key, index, value):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].set(key, index, value)
+
+
+    def ltrim(self, key, start, end):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].ltrim(key, start, end)
+
+
+    def rpop (self, key):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].rpop(key)
+
+
+    def rpush (self, key, value):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].rpush(key, value)
+
+
+    def rpushx (self, key, value):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].rpushx(key, value)
+
+
+    def sort(self, key, start=None, num=None, by=None, get=None,
+             desc=False, alpha=False, store=None):
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].store(key, start, num, by, get, desc,
+                                          alpha, None)
+

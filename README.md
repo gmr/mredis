@@ -62,3 +62,11 @@ Purposefully omitted functionality
 * Redis.mget
 * Redis.mset
 * Redis.msetnx
+
+Any function listed as deprecated in the redis-py code.
+
+Notes
+=====
+
+Redis.sort will not store currently, needs to be extended to manually store to
+the correct server
