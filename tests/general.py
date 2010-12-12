@@ -32,8 +32,7 @@ for key in keys:
 fetched = mr.keys('key:*')
 results = []
 for server in fetched:
-    temp = fetched[server].split(' ')
-    for key in temp:
+    for key in fetched[server]:
         results.append('%s->%s' % (key, mr.get(key)))
 print '%i keys fetched' % len(results)
 
