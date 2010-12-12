@@ -8,12 +8,15 @@ pool.
 
 The goal was to provide a drop in replacement/enhancement of the redis-py client. As such, the function signatures are the same wherever possible.
 
-
 Requirements
 ============
 
 * redis-py
 
+Installation
+============
+
+Use pip, easy_install or run "python setup.py install"
 
 Example
 =======
@@ -32,17 +35,26 @@ Example
         key = 'key:%.8f' % time.time()
         keys.add(key)
 
+    # Set these keys across the two Redis servers
     for key in keys:
         mr.set(key, time.time())
 
+    # Get a list of keys from all servers as a dictionary by server
     fetched = mr.keys('key:*')
+
+    # Loop through the servers and build the key list per server
     results = []
     for server in fetched:
+
+        # Get the list of keys
         temp = fetched[server].split(' ')
+
+        # Loop through the keys retrieving them from the servers
         for key in temp:
             results.append('%s->%s' % (key, mr.get(key)))
-    print '%i keys fetched' % len(results)
 
+    # Demonstrate we fetched as many keys as we set
+    print '%i keys fetched' % len(results)
 
 Purposefully omitted functionality
 ==================================
