@@ -56,6 +56,24 @@ Example
     # Demonstrate we fetched as many keys as we set
     print '%i keys fetched' % len(results)
 
+Differences
+===========
+
+The following functions return results from the server in a dictionary keyed by
+server host:port:db
+
+* Redis.bgrewriteaof
+* Redis.bgsave
+* Redis.dbsize
+* Redis.flushall
+* Redis.flushdb
+* Redis.info
+* Redis.lastsave
+* Redis.ping
+* Redis.save
+* Redis.keys
+* Redis.randomkey
+
 Pipelining
 ==========
 

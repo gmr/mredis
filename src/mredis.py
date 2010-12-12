@@ -151,51 +151,81 @@ class MRedis:
 
     ### Basic Key Commands
     def append(self, key, value):
+        """
+        Appends the string ``value`` to the value at ``key``. If ``key``
+        doesn't already exist, create it with a value of ``value``.
+        Returns the new length of the value at ``key``.
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].append(key, value)
 
-    def delete(self, key):
-
-        offset = self.get_node_offset(key)
-        return self.servers[offset].delete(key)
-
     def decr(self, key, amount=1):
+        """
+        Decrements the value of ``key`` by ``amount``.  If no key exists,
+        the value will be initialized as 0 - ``amount``
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].decr(key, amount)
 
+    def delete(self, *key):
+        "Delete one or more keys specified by ``key``"
+
+        offset = self.get_node_offset(key)
+        return self.servers[offset].delete(key)
+
     def exists(self, key):
+        "Returns a boolean indicating whether ``key`` exists"
 
         offset = self.get_node_offset(key)
         return self.servers[offset].exists(key)
 
     def expire(self, key, time):
-
+        "Set an expire flag on ``key`` for ``time`` seconds"
         offset = self.get_node_offset(key)
         return self.servers[offset].exists(key, time)
 
     def expireat(self, key, when):
+        """
+        Set an expire flag on ``key``. ``when`` can be represented
+        as an integer indicating unix time or a Python datetime object.
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].exists(key, when)
 
     def get(self, key):
+        """
+        Return the value at ``key``, or None of the key doesn't exist
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].get(key)
 
     def getset(self, key, value):
+        """
+        Set the value at ``key`` to ``value`` if key doesn't exist
+        Return the value at key ``name`` atomically
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].getset(key, value)
 
     def incr(self, key, amount=1):
+        """
+        Increments the value of ``key`` by ``amount``.  If no key exists,
+        the value will be initialized as ``amount``
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].incr(key, amount)
 
     def keys(self, pattern="*"):
+        """
+        Returns a list of keys matching ``pattern`` in a dictionary keyed by
+        server
+        """
 
         response = {}
         for server in self.servers:
@@ -236,6 +266,7 @@ class MRedis:
         raise UnextendedRedisCommand
 
     def randomkey(self):
+        "Returns the name of a random key from each server in a dictionary"
 
         response = {}
         for server in self.servers:
@@ -260,37 +291,55 @@ class MRedis:
         raise UnextendedRedisCommand
 
     def set(self, key, value):
+        """
+        Set the value at ``key`` to ``value``
+
+        * The following flags have been deprecated *
+        If ``preserve`` is True, set the value only if key doesn't already
+        exist
+        If ``getset`` is True, set the value only if key doesn't already exist
+        and return the resulting value of key
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].set(key, value)
 
     def setex(self, key, value, time):
+        """
+        Set the value of ``key`` to ``value``
+        that expires in ``time`` seconds
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].setex(key, value, time)
 
     def substr(self, key, start, end=-1):
+        """
+        Return a substring of the string at ``key``. ``start`` and ``end``
+        are 0-based integers specifying the portion of the string to return.
+        """
 
         offset = self.get_node_offset(key)
         return self.servers[offset].substr(key, start, end)
 
     def ttl(self, key):
+        "Returns the number of seconds until the ``key`` will expire"
 
         offset = self.get_node_offset(key)
         return self.servers[offset].ttl(key)
 
     def type(self, key):
-
+        "Returns the type of ``key``"
         offset = self.get_node_offset(key)
         return self.servers[offset].type(key)
 
     def watch(self, key):
-
+        "Watches the value at ``key``, or None of the key doesn't exist"
         offset = self.get_node_offset(key)
         return self.servers[offset].watch(key)
 
     def unwatch(self, key):
-
+        "Unwatches the value at ``key``, or None of the key doesn't exist"
         offset = self.get_node_offset(key)
         return self.servers[offset].unwatch(key)
 
