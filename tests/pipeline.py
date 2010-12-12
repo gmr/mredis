@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-# Include our src dir
-import sys
-sys.path.append('../src')
-
 import mredis
 import time
 

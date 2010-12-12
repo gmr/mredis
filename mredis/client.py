@@ -1,13 +1,4 @@
-"""
-mredis is wrapper for adding multiple server hashing to the redis client.
-
-Purposefully ommitted commands:
-
-  redis.move
-  redis.mget
-  redis.mset
-  redis.msetnx
-"""
+"mredis is wrapper for adding multiple server hashing to the redis client."
 
 from binascii import crc32
 import redis
@@ -29,7 +20,7 @@ class MRedis:
         self.servers = []
 
         if hash_method not in ['standard']:
-            raise InvalidHashMethod
+            raise mredis.excpetions.InvalidHashMethod
 
         self.hash_method = hash_method
 
@@ -239,7 +230,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def move(self):
         """
@@ -247,7 +238,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def mset(self):
         """
@@ -255,7 +246,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def msetnx(self):
         """
@@ -263,7 +254,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def randomkey(self):
         "Returns the name of a random key from each server in a dictionary"
@@ -280,7 +271,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def renamenx(self, key):
         """
@@ -288,7 +279,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def set(self, key, value):
         """
@@ -350,7 +341,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def brpop(self, keys, timeout=0):
         """
@@ -358,7 +349,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def lindex(self, key, index):
 
@@ -451,7 +442,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def sdiffstore(self, dest, keys, *args):
         """
@@ -459,7 +450,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def sinter(self, keys, *args):
         """
@@ -467,7 +458,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def sinterstore(self, dest, keys, *args):
         """
@@ -475,7 +466,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def sismember(self, key, value):
         "Return a boolean indicating if ``value`` is a member of set ``key``"
@@ -495,7 +486,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def spop(self, key):
         "Remove and return a random member of set ``key``"
@@ -521,7 +512,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def sunionstore(self, dest, keys, *args):
         """
@@ -529,7 +520,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     #### SORTED SET COMMANDS ####
     def zadd(self, key, value, score):
@@ -561,7 +552,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def zrange(self, key, start, end, desc=False, withscores=False):
         """
@@ -666,7 +657,7 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     def _zaggregate(self, command, dest, keys, aggregate=None):
         """
@@ -674,19 +665,10 @@ class MRedis:
         properly with multiple servers.
         """
 
-        raise UnextendedRedisCommand
+        raise mredis.exceptions.UnextendedRedisCommand
 
     ### Pipeline Function ###
     def pipeline(self, key):
 
         offset = self.get_node_offset(key)
         return self.servers[offset].pipeline()
-
-
-class InvalidHashMethod(Exception):
-    pass
-
-
-class UnextendedRedisCommand(Exception):
-    pass
-
