@@ -1,7 +1,7 @@
 About
 =====
 
-MRedis is a multi-servwe wapper for the Python Redis client at https://github.com/andymccurdy/redis-py.
+MRedis is a multi-server wapper for the Python Redis client at https://github.com/andymccurdy/redis-py.
 
 While the redis-py module supports multiple connections it does not provide any type of server hashing to automatically distribute keys across the connection
 pool.
