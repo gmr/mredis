@@ -32,6 +32,10 @@ for server in fetched:
         results.append('%s->%s' % (key, mr.get(key)))
 print '%i keys fetched' % len(results)
 
+for key in keys:
+    mr.delete(key)
+
+
 print mr.bgrewriteaof()
 print mr.dbsize()
 print mr.lastsave()

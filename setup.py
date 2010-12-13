@@ -7,7 +7,7 @@ Setup the MRedis
 from setuptools import setup
 
 setup(name='MRedis',
-      version="0.1",
+      version="0.2",
       description="MRedis is a multi-server wrapper for the excellent Python Redis client.",
       author="Gavin M. Roy",
       author_email="gmr@myyearbook.com",

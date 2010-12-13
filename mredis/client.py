@@ -163,8 +163,12 @@ class MRedis:
     def delete(self, *key):
         "Delete one or more keys specified by ``key``"
 
-        offset = self.get_node_offset(key)
-        return self.servers[offset].delete(key)
+        for temp in key:
+            offset = self.get_node_offset(temp)
+            if not self.servers[offset].delete(temp):
+                return False
+        return True
+
 
     def exists(self, key):
         "Returns a boolean indicating whether ``key`` exists"
