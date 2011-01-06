@@ -20,7 +20,7 @@ class MRedis:
         self.servers = []
 
         if hash_method not in ['standard']:
-            raise mredis.excpetions.InvalidHashMethod
+            raise mredis.exceptions.InvalidHashMethod
 
         self.hash_method = hash_method
 
